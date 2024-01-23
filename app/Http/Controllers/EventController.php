@@ -31,7 +31,12 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $request->validate(['title'=>'required', 'start'=>'required', 'end'=>'required']);
-        $event = Event::create($request->only(['title', 'start', 'end', 'doctor_name']));
+        $event = Event::create([
+            'title'       => $request->title,
+            'start'       => \Carbon\Carbon::parse($request->start)->format('Y-m-d H:i:s'),
+            'end'         => \Carbon\Carbon::parse($request->end)->format('Y-m-d H:i:s'),
+            'doctor_name' => $request->doctor_name
+        ]);
         return to_route('events.create', ['event'=>$event]);
     }
 
